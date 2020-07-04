@@ -1,3 +1,13 @@
+const doc = document;
+
+const qs = (sel, ctx = doc) => ctx.querySelector(sel);
+
+const qsa = (sel, ctx = doc) => ctx.querySelectorAll(sel);
+
+const hasProp = (o, p) => ({}).hasOwnProperty.call(o, p);
+
+const isFunc = v => typeof v === 'function';
+
 class Viewbox {
 
   constructor(options = {}) {
