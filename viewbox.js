@@ -1,13 +1,3 @@
-const doc = document;
-
-const qs = (sel, ctx = doc) => ctx.querySelector(sel);
-
-const qsa = (sel, ctx = doc) => ctx.querySelectorAll(sel);
-
-const hasProp = (o, p) => ({}).hasOwnProperty.call(o, p);
-
-const isFunc = v => typeof v === 'function';
-
 class Viewbox {
 
   constructor(options = {}) {
@@ -43,10 +33,18 @@ class Viewbox {
   init() {
 
     if(this.currentView === null) {
-      
-      this.currentView = this.views[this.options.default];
 
-      this.notifyChangeListeners(null, this.currentView);
+      const name = this.options.default;
+
+      this.currentView = {
+      
+        el: this.views[name],
+
+        name
+      
+      };
+
+      this.notifyChangeListeners(null, name);
 
     }
 
@@ -70,15 +68,21 @@ class Viewbox {
       
       const view = this.views[name];
 
-      if(this.currentView !== view) {
+      if(this.currentView.name !== name) {
 
-        this.notifyChangeListeners(this.currentView, view);
+        this.notifyChangeListeners(this.currentView.name, name);
 
-        this.currentView.classList.add('hidden');
+        this.currentView.el.classList.add('hidden');
 
-        this.currentView = view;
+        this.currentView = {
+          
+          el: view,
+          
+          name
 
-        this.currentView.classList.remove('hidden');
+        };
+
+        this.currentView.el.classList.remove('hidden');
 
       }
 
