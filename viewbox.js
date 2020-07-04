@@ -24,7 +24,7 @@ class Viewbox {
 
     this.viewbox = qs('#viewbox');
 
-    this.views =  [...qsa('[data-view]')].reduce((_views, el) => {
+    this.views =  Array.from(qsa('[data-view]')).reduce((_views, el) => {
 
       const name = el.getAttribute('data-view');
 
