@@ -24,15 +24,15 @@ class Viewbox {
 
     this.viewbox = qs('#viewbox');
 
-    this.views =  Array.from(qsa('[data-view]')).reduce((_views, el) => {
+    this.views =  Array.from(qsa('[data-view]')).reduce((views, el) => {
 
       const name = el.getAttribute('data-view');
 
-      _views[name] = el;
+      views[name] = { el, name };
 
       if(name !== this.options.default) el.classList.add('hidden');
 
-      return _views;
+      return views;
 
     }, {});
 
@@ -46,13 +46,7 @@ class Viewbox {
 
       const name = this.options.default;
 
-      this.currentView = {
-      
-        el: this.views[name],
-
-        name
-      
-      };
+      this.currentView = this.views[name];
 
       this.notifyChangeListeners(null, name);
 
@@ -72,11 +66,21 @@ class Viewbox {
 
   }
 
+  hasView(name) {
+    
+    if(name && hasProp(this.views, name)) {
+    
+      return true;
+    
+    }
+  
+    return false;
+  
+  }
+  
   setView(name) {
   
-    if(!!name && hasProp(this.views, name)) {
-      
-      const view = this.views[name];
+    if(!!name && hasView(name)) {
 
       if(this.currentView.name !== name) {
 
@@ -84,13 +88,7 @@ class Viewbox {
 
         this.currentView.el.classList.add('hidden');
 
-        this.currentView = {
-          
-          el: view,
-          
-          name
-
-        };
+        this.currentView = this.views[name];
 
         this.currentView.el.classList.remove('hidden');
 
